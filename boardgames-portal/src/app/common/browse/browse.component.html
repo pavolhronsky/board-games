@@ -1,0 +1,21 @@
+<div id="browse-wrapper">
+  <nav>
+    <div class="dropdown user-details">
+      <span>{{getFirstInitial}}</span>
+      <div *ngIf="getMe" class="dropdown-content user-card">
+        <h4 class="align-end" >{{getMe.givenName}} "{{getMe.nickname}}" {{getMe.familyName}}</h4>
+        <h5 class="align-end">{{getMe.email}}</h5>
+        <div style="width: 100%; display: flex; flex-direction: row; justify-content: space-between;">
+          <h6 (click)="showUserDetails()">Edit My Nickname</h6>
+          <h6 (click)="logout()" style="color: cyan;">Sign Out</h6>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="inside-wrapper">
+    <app-game-tile *ngFor="let url of getGamesList" [gameUrl]="url"></app-game-tile>
+  </div>
+
+  <app-user-details *ngIf="getMe" [ngStyle]="{'display': isUserDetailsChangeOpen ? 'initial' : 'none'}" (updatedUser)="onUserUpdated($event)" [user]="getMe"></app-user-details>
+</div>

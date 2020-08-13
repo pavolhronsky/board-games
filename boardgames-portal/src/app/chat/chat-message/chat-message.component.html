@@ -1,0 +1,15 @@
+<div *ngIf="isUserMessage" class="user-message">
+  <div class="author-initial" [ngStyle]="{'background-color': authorColor}">{{authorInitial}}</div>
+  <div class="message">
+    <span class="author-name">{{authorName}}</span>
+    <p class="content">{{messageContent}}</p>
+  </div>
+</div>
+
+<div *ngIf="isConnectionMessage" class="connection-message">
+  <span>{{messageContent}}</span>
+</div>
+
+<div *ngIf="isGameMessage" class="game-message">
+  <span>{{messageContent}}</span>
+</div>

@@ -1,0 +1,4 @@
+<div class="game-field" [ngClass]="{'mid-row': field.row === 1, 'mid-column': field.column === 1}" (click)="makeMove()">
+  <app-circle *ngIf="isCircle()" [color]="field.color"></app-circle>
+  <app-diagonal-cross *ngIf="isDiagonalCross()" [color]="field.color"></app-diagonal-cross>
+</div>

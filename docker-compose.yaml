@@ -1,0 +1,230 @@
+version: "3"
+
+services:
+  portal:
+    build: boardgames-portal
+    image: phronsky/portal:latest
+    networks:
+      - traefik
+    labels:
+      traefik.docker.network: "traefik"
+      traefik.enable: "true"
+      traefik.frontend.rule: "Host: ${PORTAL_TRAEFIK_HOST}"
+      traefik.port: "8080"
+      traefik.protokol: "http"
+    container_name: portal
+
+  rabbitmq:
+    image: rabbitmq:3.7.15-alpine
+    restart: always
+    networks:
+      - bgrabbitmq
+    container_name: bgrabbitmq
+
+  authdb:
+    image: mysql:8.0.16
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${AUTH_DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${AUTH_DB_DATABASE}
+      MYSQL_USER: ${AUTH_DB_USER}
+      MYSQL_PASSWORD: ${AUTH_DB_PASSWORD}
+    networks:
+      - authnet
+    container_name: authorization-db
+
+  auth:
+    build: authorization
+    image: phronsky/auth:latest
+    restart: always
+    networks:
+      - authnet
+      - traefik
+      - bgrabbitmq
+    environment:
+      SPRING_CONFIG_ADDITIONAL_LOCATION: ${SPRING_CONFIG_ADDITIONAL_LOCATION}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+    volumes:
+        - "${AUTH_CONFIG_HOST_VOLUME}:/app/conf:ro"
+    labels:
+      traefik.docker.network: "traefik"
+      traefik.enable: "true"
+      traefik.frontend.rule: "Host: ${AUTH_TRAEFIK_HOST}"
+      traefik.port: "8080"
+      traefik.protokol: "http"
+    depends_on:
+      - authdb
+      - rabbitmq
+    container_name: authorization-service
+
+  chatdb:
+    image: mysql:8.0.16
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${CHAT_DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${CHAT_DB_DATABASE}
+      MYSQL_USER: ${CHAT_DB_USER}
+      MYSQL_PASSWORD: ${CHAT_DB_PASSWORD}
+    networks:
+      - chatnet
+    container_name: chat-db
+
+  chat:
+    build: chat
+    image: phronsky/chat:latest
+    restart: always
+    networks:
+      - chatnet
+      - traefik
+      - bgrabbitmq
+    environment:
+      SPRING_CONFIG_ADDITIONAL_LOCATION: ${SPRING_CONFIG_ADDITIONAL_LOCATION}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+    volumes:
+        - "${CHAT_CONFIG_HOST_VOLUME}:/app/conf:ro"
+    labels:
+      traefik.docker.network: "traefik"
+      traefik.enable: "true"
+      traefik.frontend.rule: "Host: ${CHAT_TRAEFIK_HOST}"
+      traefik.port: "8080"
+      traefik.protokol: "http"
+    depends_on:
+      - chatdb
+      - rabbitmq
+    container_name: chat-service
+
+  errordb:
+    image: mysql:8.0.16
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${ERROR_DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${ERROR_DB_DATABASE}
+      MYSQL_USER: ${ERROR_DB_USER}
+      MYSQL_PASSWORD: ${ERROR_DB_PASSWORD}
+    networks:
+      - errornet
+    container_name: error-db
+
+  error:
+    build: error
+    restart: always
+    networks:
+      - errornet
+      - traefik
+      - bgrabbitmq
+    environment:
+      SPRING_CONFIG_ADDITIONAL_LOCATION: ${SPRING_CONFIG_ADDITIONAL_LOCATION}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+    volumes:
+        - "${ERROR_CONFIG_HOST_VOLUME}:/app/conf:ro"
+    labels:
+      traefik.docker.network: "traefik"
+      traefik.enable: "true"
+      traefik.frontend.rule: "Host: ${ERROR_TRAEFIK_HOST}"
+      traefik.port: "8080"
+      traefik.protokol: "http"
+    depends_on:
+      - errordb
+      - rabbitmq
+    container_name: error-service
+
+  redis:
+    image: redis:5.0.5
+    restart: always
+    networks:
+      - bgredis
+    container_name: bgredis
+
+  tictactoedb:
+    image: mysql:8.0.16
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${TICTACTOE_DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${TICTACTOE_DB_DATABASE}
+      MYSQL_USER: ${TICTACTOE_DB_USER}
+      MYSQL_PASSWORD: ${TICTACTOE_DB_PASSWORD}
+    networks:
+      - tictactoenet
+    container_name: tictactoe-db
+
+  tictactoe:
+    build: tic-tac-toe-engine
+    image: phronsky/tictactoe:latest
+    restart: always
+    networks:
+      - tictactoenet
+      - traefik
+      - bgrabbitmq
+      - bgredis
+    environment:
+      SPRING_CONFIG_ADDITIONAL_LOCATION: ${SPRING_CONFIG_ADDITIONAL_LOCATION}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+    volumes:
+        - "${TICTACTOE_CONFIG_HOST_VOLUME}:/app/conf:ro"
+    labels:
+      traefik.docker.network: "traefik"
+      traefik.enable: "true"
+      traefik.frontend.rule: "Host: ${TICTACTOE_TRAEFIK_HOST}"
+      traefik.port: "8080"
+      traefik.protokol: "http"
+    depends_on:
+      - tictactoedb
+      - rabbitmq
+      - redis
+    container_name: tictactoe-service
+
+  tickettorideslovakiadb:
+    image: mysql:8.0.16
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${TICKETTORIDESLOVAKIA_DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${TICKETTORIDESLOVAKIA_DB_DATABASE}
+      MYSQL_USER: ${TICKETTORIDESLOVAKIA_DB_USER}
+      MYSQL_PASSWORD: ${TICKETTORIDESLOVAKIA_DB_PASSWORD}
+    networks:
+      - tickettorideslovakianet
+    container_name: tictactoe-db
+
+  tickettorideslovakia:
+    build: tic-tac-toe-engine
+    image: phronsky/tictactoe:latest
+    restart: always
+    networks:
+      - tickettorideslovakianet
+      - traefik
+      - bgrabbitmq
+      - bgredis
+    environment:
+      SPRING_CONFIG_ADDITIONAL_LOCATION: ${SPRING_CONFIG_ADDITIONAL_LOCATION}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+    volumes:
+        - "${TICKETTORIDESLOVAKIA_CONFIG_HOST_VOLUME}:/app/conf:ro"
+    labels:
+      traefik.docker.network: "traefik"
+      traefik.enable: "true"
+      traefik.frontend.rule: "Host: ${TICKETTORIDESLOVAKIA_TRAEFIK_HOST}"
+      traefik.port: "8080"
+      traefik.protokol: "http"
+    depends_on:
+      - tickettorideslovakiadb
+      - rabbitmq
+      - redis
+    container_name: tickettorideslovakia-service
+
+networks:
+  bgrabbitmq:
+    internal: true
+  bgredis:
+    internal: true
+  authnet:
+    internal: true
+  chatnet:
+    internal: true
+  errornet:
+    internal: true
+  tictactoenet:
+    internal: true
+  tickettorideslovakianet:
+    internal: true
+  traefik:
+    external: true

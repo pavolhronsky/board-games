@@ -1,0 +1,17 @@
+<div class="game-tile">
+  <div *ngIf="getGameDescription" routerLink="/games/tictactoe" class="game-description">
+    <h1>{{getGameDescription.name}}</h1>
+    <p>{{getGameDescription.description}}</p>
+    <div style="display: flex; justify-content: space-between;">
+      <p>Play time: {{getGameDescription.playingTime}}</p>
+      <p *ngIf="getGameDescription.minNumberOfPlayers === getGameDescription.maxNumberOfPlayers">
+        Players: {{getGameDescription.minNumberOfPlayers}}</p>
+      <p *ngIf="getGameDescription.minNumberOfPlayers !== getGameDescription.maxNumberOfPlayers">
+        Players: {{getGameDescription.minNumberOfPlayers}}-{{getGameDescription.maxNumberOfPlayers}}</p>
+    </div>
+  </div>
+  <div *ngIf="!getGameDescription"
+       style="display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; background-color: rgba(160, 160, 160, 0.8); color: black;">
+    <p>Sorry, currently unavailable!</p>
+  </div>
+</div>

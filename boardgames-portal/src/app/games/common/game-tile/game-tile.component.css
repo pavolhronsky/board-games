@@ -1,0 +1,21 @@
+.game-tile {
+  width: 426px;
+  height: 235px;
+  /*background-image: url("../../../../assets/images/games/tictactoe-front.png");*/
+  background-color: white;
+  color: black;
+}
+
+.game-description {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 25px;
+  width: calc(100% - 50px);
+  height: calc(100% - 50px);
+  opacity: 1;
+}
+
+.game-tile h1 {
+  text-align: center;
+}

@@ -1,0 +1,45 @@
+.user-message {
+  display: flex;
+  flex-direction: row;
+  padding: 8px 0;
+}
+
+.user-message .author-initial {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  width: 36px;
+  height: 36px;
+  margin: 0 8px;
+  border-radius: 50%;
+}
+
+.user-message .message {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-message .message .author-name {
+  font-weight: bold;
+  color: black;
+  height: 18px;
+  line-height: 18px;
+  font-size: 14px;
+}
+
+.user-message .message .content {
+  color: dimgray;
+  line-height: 18px;
+  font-size: 14px;
+}
+
+.connection-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: gray;
+  height: 24px;
+  font-size: 12px;
+}

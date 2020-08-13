@@ -1,0 +1,8 @@
+<div>
+  <span *ngFor="let player of publicGame.players" [ngClass]="{'active': isActivePlayer(player)}"
+        [ngStyle]="{'color': player.color}" style="padding: 0 20px;">{{player.user.name}}</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; width: 600px;">
+  <app-game-field *ngFor="let field of publicGame.fields" [gameId]="gameId" [field]="field"
+                  [gameService]="gameService"></app-game-field>
+</div>

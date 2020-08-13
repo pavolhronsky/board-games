@@ -1,0 +1,29 @@
+<div style="width: 500px; margin: 0 auto;">
+  <table>
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Nickname</th>
+      <th>E-mail</th>
+      <th>Verified</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of getUserPage">
+      <td>{{user.givenName}} {{user.familyName}}</td>
+      <td>{{user.nickname}}</td>
+      <td>{{user.email}}</td>
+      <td *ngIf="!user.verified">
+        <button class="modal-button verify" (click)="verify(user.id)">Verify</button>
+      </td>
+      <td *ngIf="user.verified">
+        <button class="modal-button disprove" (click)="disprove(user.id)">Revoke</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div style="width: 100%; display: flex; justify-content: space-between;">
+    <button [disabled]="isFirst" class="pagination-arrow" (click)="previousPage()"><</button>
+    <button [disabled]="isLast" class="pagination-arrow" (click)="nextPage()">></button>
+  </div>
+</div>

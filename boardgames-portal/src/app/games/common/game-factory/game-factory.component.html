@@ -1,0 +1,17 @@
+<div id="game-factory-wrapper" style="background-repeat: no-repeat; background-position: center center; background-size: cover;"
+     [ngStyle]="{'background-image': getGameBackgroundImage}">
+  <nav>
+    <svg class="back-button" height="50" width="50" (click)="goBack()">
+      <line x1="12" y1="25" x2="38" y2="25" stroke="white" stroke-linecap="round" stroke-width="3"></line>
+      <line x1="10" y1="25" x2="22" y2="15" stroke-linecap="round" stroke="white" stroke-width="3"></line>
+      <line x1="10" y1="25" x2="22" y2="35" stroke-linecap="round" stroke="white" stroke-width="3"></line>
+    </svg>
+  </nav>
+
+  <div class="inside-wrapper">
+    <div *ngIf="isTicTacToeGame">
+      <app-tic-tac-toe-game [gameName]="gameName" [gameId]="gameId" [gameService]="gameService"
+                            [userData]="userData" (blob)="onGameBackgroundImageSet($event)"></app-tic-tac-toe-game>
+    </div>
+  </div>
+</div>

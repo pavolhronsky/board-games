@@ -1,0 +1,1 @@
+- [ ] Create special request ID for all `logs` connected with that request.

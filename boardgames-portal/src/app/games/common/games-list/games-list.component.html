@@ -1,0 +1,32 @@
+<div id="game-list-wrapper">
+  <nav>
+    <svg class="back-button" height="50" width="50" routerLink="/browse">
+      <line x1="12" y1="25" x2="38" y2="25" stroke="white" stroke-linecap="round" stroke-width="3"></line>
+      <line x1="10" y1="25" x2="22" y2="15" stroke-linecap="round" stroke="white" stroke-width="3"></line>
+      <line x1="10" y1="25" x2="22" y2="35" stroke-linecap="round" stroke="white" stroke-width="3"></line>
+    </svg>
+    <div class="create-game" (click)="openCreateGameModal()">Create Game</div>
+  </nav>
+
+  <div class="inside-wrapper">
+    <table id="games-list-active">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Players</th>
+        <th>Status</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let game of getGames" routerLink="{{game.id}}">
+        <td>{{game.name}}</td>
+        <td>{{getPlayerNames(game)}}</td>
+        <td>{{game.stage}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <app-create-game-modal [ngStyle]="{'display': isCreateGameModalOpen ? 'initial' : 'none'}"
+                         (newGameName)="onNewGameName($event)"></app-create-game-modal>
+</div>

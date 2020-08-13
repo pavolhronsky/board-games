@@ -1,0 +1,23 @@
+.game-field {
+  display: flex;
+  width: 198px;
+  height: 198px;
+  justify-content: center;
+  align-items: center;
+  /*border: 1px solid #000000;*/
+}
+
+.game-field p {
+  line-height: 50px;
+  font-size: 50px;
+}
+
+.mid-row {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.mid-column {
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+}

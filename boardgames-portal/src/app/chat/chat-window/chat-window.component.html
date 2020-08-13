@@ -1,0 +1,7 @@
+<div id="chat" class="hidden">
+  <div id="chat-header" (click)="showHide()">Chat</div>
+  <div id="chat-messages">
+    <app-chat-message *ngFor="let message of getMessages" [message]="message"></app-chat-message>
+  </div>
+  <input type="text" id="chat-input" [formControl]="newMessageControl" (keyup.enter)="send()"/>
+</div>

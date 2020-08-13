@@ -1,0 +1,53 @@
+<div *ngIf="isCreated">
+  <h1 style="text-align: center; margin-bottom: 25px;">Game '{{preGame.name}}' is ready!</h1>
+  <table>
+    <thead>
+    <tr>
+      <th style="width: 150px;">Username</th>
+      <th style="width: 170px;">Token</th>
+      <th style="width: 170px;">Color</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let player of preGame.players">
+      <td style="text-align: center;"><span>{{player.user.name}}</span></td>
+      <td>
+        <div style="display: flex; align-items: center; justify-content: center; height: 30px;">
+          <select [disabled]="!isMe(player.user.id)" (change)="tokenSelected($event)">
+            <option [disabled]="true">Choose a token</option>
+            <option *ngFor="let token of availableTokens"
+                    [selected]="player.token === token">{{token}}</option>
+          </select>
+        </div>
+      </td>
+      <td>
+        <div style="position: relative; display: flex; align-items: center; justify-content: center; height: 30px;">
+          <select [disabled]="!isMe(player.user.id)" (change)="colorSelected($event)">
+            <option [disabled]="true">Choose a color</option>
+            <option *ngFor="let color of availableColors"
+                    [selected]="player.color === color">{{color}}</option>
+          </select>
+          <div style="position: absolute; top: 5px; left: 0; width: 20px; height: 20px; margin: 0; padding: 0;" [ngStyle]="{'background-color': player.color}"></div>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <button type="button" (click)="startGame()" class="modal-button" style="margin: 25px auto 0 auto; display: block;">Start game</button>
+</div>
+
+<div *ngIf="isInProgress">
+  <h1>PublicGame '{{publicGame.name}}' is running!</h1>
+  <app-game-board class="justify-center" [publicGame]="publicGame" [gameId]="gameId"
+                  [gameService]="gameService"></app-game-board>
+</div>
+
+<div *ngIf="isFinished">
+  <h1>PublicGame '{{publicGame.name}}' is finished!</h1>
+  <p *ngIf="publicGame.winner === null">It is a tie!</p>
+  <p *ngIf="publicGame.winner !== null">Winner is {{publicGame.winner.user.name}}</p>
+  <app-game-board class="justify-center" [publicGame]="publicGame"></app-game-board>
+</div>
+
+<app-chat-window [gameName]="gameName" [gameId]="gameId" [userColorsMap]="playerColors"
+                 [userData]="userData"></app-chat-window>
